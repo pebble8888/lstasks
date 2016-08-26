@@ -410,7 +410,7 @@ int main(int argc, char *argv[]) {
                            time_constraint_policy.computation);
                     Printf(INDENT_L4 "constraint = %-4u\n",
                            time_constraint_policy.constraint);
-                    Printf(INDENT_L4 "preemtible = %s\n",
+                    Printf(INDENT_L4 "preemptible = %s\n",
                            (time_constraint_policy.preemptible == TRUE) ? \
                            "TRUE" : "FALSE");
                     break;
