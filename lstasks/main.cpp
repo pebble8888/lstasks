@@ -378,61 +378,88 @@ int main(int argc, char *argv[]) {
             Printf(INDENT_L3 "system run time = %u s %u us\n",
                    basic_info_th->system_time.seconds,
                    basic_info_th->system_time.microseconds);
-            Printf(INDENT_L3 "scaled cpu usage precentage = %u\n",
+            Printf(INDENT_L3 "scaled cpu usage percentage = %u\n",
                    basic_info_th->cpu_usage);
             switch (basic_info_th->policy){
                 case THREAD_EXTENDED_POLICY:
-                    get_default = FALSE;
-                    thread_info_count = THREAD_EXTENDED_POLICY_COUNT;
-                    kr = thread_policy_get(thread_list[j], THREAD_EXTENDED_POLICY,
-                                           (thread_policy_t)&extended_policy,
-                                           &thread_info_count, &get_default);
-                    if (kr != KERN_SUCCESS)
-                        break;
-                    Printf(INDENT_L3 "scheduling policy = %s\n",
-                           (extended_policy.timeshare == TRUE) ? \
-                           "STANDARD" : "EXTENDED");
+                    Printf(INDENT_L3 "main EXTENDED_POLICY\n");
                     break;
                 case THREAD_TIME_CONSTRAINT_POLICY:
-                    get_default = FALSE;
-                    thread_info_count = THREAD_TIME_CONSTRAINT_POLICY_COUNT;
-                    kr = thread_policy_get(thread_list[j],
-                                           THREAD_TIME_CONSTRAINT_POLICY,
-                                           (thread_policy_t)&time_constraint_policy,
-                                           &thread_info_count, &get_default);
-                    if (kr != KERN_SUCCESS)
-                        break;
-                    Printf(INDENT_L3 "scheduling policy = " \
-                           "TIME_CONSTRAINT\n");
-                    Printf(INDENT_L4 "period = %-4u\n",
-                           time_constraint_policy.period);
-                    Printf(INDENT_L4 "computation = %-4u\n",
-                           time_constraint_policy.computation);
-                    Printf(INDENT_L4 "constraint = %-4u\n",
-                           time_constraint_policy.constraint);
-                    Printf(INDENT_L4 "preemptible = %s\n",
-                           (time_constraint_policy.preemptible == TRUE) ? \
-                           "TRUE" : "FALSE");
+                    Printf(INDENT_L3,"main TIME_CONSTRAINT_POLICY\n");
                     break;
                 case THREAD_PRECEDENCE_POLICY:
-                    get_default = FALSE;
-                    thread_info_count = THREAD_PRECEDENCE_POLICY;
-                    kr = thread_policy_get(thread_list[j], THREAD_PRECEDENCE_POLICY,
-                                           (thread_policy_t)&precedence_policy,
-                                           &thread_info_count, &get_default);
-                    
-                if (kr != KERN_SUCCESS)
+                    Printf(INDENT_L3,"main PRECEDENCE_POLICY\n");
                     break;
-                
-                    Printf(INDENT_L3 "sacheduling policy = PRECEDENCE\n");
-                    Printf(INDENT_L4 "importance = %-4u\n",
-                           precedence_policy.importance);
-                    break;
-                
                 default:
-                    Printf(INDENT_L3 "scheduling policy = UNKNOWN?\n");
+                    Printf(INDENT_L3,"main UNKNOWN\n");
                     break;
             }
+            
+            //switch (basic_info_th->policy){
+            //    case THREAD_EXTENDED_POLICY:
+            {
+                get_default = FALSE;
+                thread_info_count = THREAD_EXTENDED_POLICY_COUNT;
+                kr = thread_policy_get(thread_list[j], THREAD_EXTENDED_POLICY,
+                                       (thread_policy_t)&extended_policy,
+                                       &thread_info_count, &get_default);
+                if (kr != KERN_SUCCESS){
+                    //break;
+                    Printf("Error!\n");
+                }
+                Printf(INDENT_L3 "scheduling policy = %s\n",
+                       (extended_policy.timeshare == TRUE) ? \
+                       "STANDARD(timeshare)" : "EXTENDED(not timeshare)");
+            }
+            //        break;
+            //    case THREAD_TIME_CONSTRAINT_POLICY:
+            {
+                get_default = FALSE;
+                thread_info_count = THREAD_TIME_CONSTRAINT_POLICY_COUNT;
+                kr = thread_policy_get(thread_list[j],
+                                       THREAD_TIME_CONSTRAINT_POLICY,
+                                       (thread_policy_t)&time_constraint_policy,
+                                       &thread_info_count, &get_default);
+                if (kr != KERN_SUCCESS){
+                    //break;
+                    Printf("Error!\n");
+                }
+                Printf(INDENT_L3 "scheduling policy = " \
+                       "TIME_CONSTRAINT\n");
+                Printf(INDENT_L4 "period = %-4u\n",
+                       time_constraint_policy.period);
+                Printf(INDENT_L4 "computation = %-4u\n",
+                       time_constraint_policy.computation);
+                Printf(INDENT_L4 "constraint = %-4u\n",
+                       time_constraint_policy.constraint);
+                Printf(INDENT_L4 "preemptible = %s\n",
+                       (time_constraint_policy.preemptible == TRUE) ? \
+                       "TRUE" : "FALSE");
+            }
+            //        break;
+            //    case THREAD_PRECEDENCE_POLICY:
+            {
+                get_default = FALSE;
+                thread_info_count = THREAD_PRECEDENCE_POLICY;
+                kr = thread_policy_get(thread_list[j], THREAD_PRECEDENCE_POLICY,
+                                       (thread_policy_t)&precedence_policy,
+                                       &thread_info_count, &get_default);
+                
+                if (kr != KERN_SUCCESS) {
+                    //break;
+                    Printf("Error!\n");
+                }
+                
+                Printf(INDENT_L3 "sacheduling policy = PRECEDENCE\n");
+                Printf(INDENT_L4 "importance = %-4u\n",
+                       precedence_policy.importance);
+            //        break;
+            }
+                
+            //    default:
+            //        Printf(INDENT_L3 "scheduling policy = UNKNOWN?\n");
+            //        break;
+            //}
             
             Printf(INDENT_L3
                    "run state = %-4u (%s)\n",
