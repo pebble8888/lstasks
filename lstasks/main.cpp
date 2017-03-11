@@ -451,7 +451,7 @@ int main(int argc, char *argv[]) {
                 }
                 
                 Printf(INDENT_L3 "sacheduling policy = PRECEDENCE\n");
-                Printf(INDENT_L4 "importance = %-4u\n",
+                Printf(INDENT_L4 "importance = %-4d\n",
                        precedence_policy.importance);
             //        break;
             }
